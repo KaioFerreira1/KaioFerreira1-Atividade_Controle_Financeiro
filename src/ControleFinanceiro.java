@@ -6,17 +6,14 @@ public class ControleFinanceiro {
     private static final int NUM_THREADS = 3;
 
     public static void main(String[] args) throws Exception {
-        // Mapas para armazenar os totais por data
         Map<String, Double> receitas = new HashMap<>();
         Map<String, Double> despesas = new HashMap<>();
         Map<String, Double> provisoes = new HashMap<>();
 
-        // Criar um CyclicBarrier para sincronizar as threads
         CyclicBarrier barrier = new CyclicBarrier(NUM_THREADS, () -> {
             calcularTotais(receitas, despesas, provisoes);
         });
 
-        // Criar e iniciar as threads
         Thread receitaThread = new Thread(new ProcessadorFinanceiro("RECEITA", "receitas.csv", receitas, barrier));
         Thread despesaThread = new Thread(new ProcessadorFinanceiro("DESPESA", "despesas.csv", despesas, barrier));
         Thread provisaoThread = new Thread(new ProcessadorFinanceiro("PROVISÃO", "provisao.csv", provisoes, barrier));
